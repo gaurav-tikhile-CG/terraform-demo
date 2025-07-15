@@ -158,21 +158,8 @@ pipeline {
     }
 
     post {
-        success {
-            echo "Terraform ${env.TF_ACTION} completed successfully for ${env.DEPLOY_ENV} in ${env.REGION}"
-        }
-        failure {
-            echo "Terraform ${env.TF_ACTION} failed for ${env.DEPLOY_ENV} in ${env.REGION}"
-        }
-        aborted {
-            echo "Terraform ${env.TF_ACTION} was aborted for ${env.DEPLOY_ENV}"
-        }
         always {
-            echo "Archiving tfplan.txt and cleaning up workspace"
-            dir('terraform') {
-                archiveArtifacts artifacts: 'tfplan.txt', allowEmptyArchive: true
-            }
-            cleanWs()
+            echo "Pipeline finished"
         }
     }
 }
