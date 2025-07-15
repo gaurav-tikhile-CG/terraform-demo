@@ -42,7 +42,7 @@ pipeline {
     environment {
         DEPLOY_ENV     = "${params.ENVIRONMENT}"
         REGION         = "${params.REGION}"
-        AWS_ACCOUNT_ID = "730335494494"
+        AWS_ACCOUNT_ID = "028343876427"
         AWS_IAM_ROLE   = "${params.AWS_IAM_ROLE}"
         TF_ACTION      = "${params.TF_ACTION}"
         GIT_REPO_URL   = "${params.GIT_REPO_URL}"
