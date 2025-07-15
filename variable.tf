@@ -1,5 +1,6 @@
-variable "aws_region" {
-  description = "AWS region to deploy resources"
+variable "region" {
+  description = "AWS region"
   type        = string
 }
+
 //This allows Terraform to recognize var.aws_region as a valid input variable.
