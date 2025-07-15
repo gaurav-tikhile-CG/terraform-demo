@@ -24,7 +24,7 @@ pipeline {
         )
         string(
             name: 'BRANCH',
-            defaultValue: 'ahead-infra-initial-release',
+            defaultValue: 'main',
             description: 'Git branch to use (e.g. develop, main)'
         )
         string(
