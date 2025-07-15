@@ -1,15 +1,19 @@
 pipeline {
     agent any
 
+    tools {
+        git 'Default'
+    }
+
     environment {
-        AWS_ACCESS_KEY_ID     = credentials('d9abfd48-9f03-4e56-b83b-370155ba4f60')
-        AWS_SECRET_ACCESS_KEY = credentials('d9abfd48-9f03-4e56-b83b-370155ba4f60')
+        AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
     }
 
     stages {
-        stage('Checkout') {
+        stage('Clone Repository') {
             steps {
-                checkout scm
+                git credentialsId: 'd9abfd48-9f03-4e56-b83b-370155ba4f60', url: 'https://github.com/gaurav-tikhile-CG/terraform-demo.git', branch: 'main'
             }
         }
 
@@ -27,8 +31,15 @@ pipeline {
 
         stage('Terraform Apply') {
             steps {
+                input message: 'Approve Terraform Apply?'
                 bat 'terraform apply -auto-approve'
             }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished.'
         }
     }
 }
