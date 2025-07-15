@@ -1,13 +1,9 @@
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
 }
 
-resource "random_id" "bucket_id" {
-  byte_length = 4
-}
+data "aws_iam_users" "all" {}
 
-resource "aws_s3_bucket" "example" {
-  bucket = "my-terraform-demo-bucket-${random_id.bucket_id.hex}"
-  acl    = "private"
+output "iam_user_names" {
+  value = data.aws_iam_users.all.names
 }
-
