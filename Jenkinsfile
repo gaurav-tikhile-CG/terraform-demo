@@ -57,7 +57,6 @@ pipeline {
                     echo """
                     Pipeline Configuration:
                     ─────────────────────────────
-                    Custom Environment Variables:
                     DEPLOY_ENV     : ${env.DEPLOY_ENV}
                     REGION         : ${env.REGION}
                     AWS_ACCOUNT_ID : ${env.AWS_ACCOUNT_ID}
@@ -66,12 +65,6 @@ pipeline {
                     GIT_REPO_URL   : ${env.GIT_REPO_URL}
                     BRANCH         : ${env.BRANCH}
                     GIT_CREDS_ID   : ${env.GIT_CREDS_ID}
-
-                    Jenkins Environment Variables:
-                    JOB_NAME       : ${env.JOB_NAME}
-                    BUILD_NUMBER   : ${env.BUILD_NUMBER}
-                    GIT_COMMIT     : ${env.GIT_COMMIT}
-                    GIT_BRANCH     : ${env.GIT_BRANCH}
                     """
                 }
             }
@@ -98,8 +91,8 @@ pipeline {
                     script {
                         try {
                             withAWS(roleAccount: env.AWS_ACCOUNT_ID, role: env.AWS_IAM_ROLE, region: env.REGION) {
-                                echo "Running terraform init with backend config for ${env.DEPLOY_ENV}"
-                                sh "terraform init -backend-config=environments/${env.DEPLOY_ENV}/backend.config -reconfigure"
+                                echo "Running terraform init"
+                                sh "terraform init -reconfigure"
                             }
                             echo "Terraform init successful"
                         } catch (err) {
@@ -122,10 +115,10 @@ pipeline {
 
                                 if (env.TF_ACTION == 'apply') {
                                     echo "Planning to apply resources..."
-                                    sh "terraform plan -var-file=environments/${env.DEPLOY_ENV}/terraform.tfvars -var='region=${env.REGION}' -out=tfplan"
+                                    sh "terraform plan -var='region=${env.REGION}' -out=tfplan"
                                 } else if (env.TF_ACTION == 'destroy') {
                                     echo "Planning to destroy resources..."
-                                    sh "terraform plan -destroy -var-file=environments/${env.DEPLOY_ENV}/terraform.tfvars -var='region=${env.REGION}' -out=tfplan"
+                                    sh "terraform plan -destroy -var='region=${env.REGION}' -out=tfplan"
                                 } else {
                                     error "Invalid TF_ACTION: ${env.TF_ACTION}"
                                 }
