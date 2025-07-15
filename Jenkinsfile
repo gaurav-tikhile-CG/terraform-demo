@@ -29,12 +29,12 @@ pipeline {
         )
         string(
             name: 'GIT_CREDS_ID',
-            defaultValue: 'gaurav-tikhile-CG',
+            defaultValue: 'd9abfd48-9f03-4e56-b83b-370155ba4f60',
             description: 'Jenkins Credential ID used for Git access'
         )
         string(
             name: 'AWS_IAM_ROLE',
-            defaultValue: 'JenkinsWorkloadAccountAccessRole',
+            defaultValue: 'arn:aws:account::028343876427:account',
             description: 'IAM role to assume in the AWS account for deployment'
         )
     }
