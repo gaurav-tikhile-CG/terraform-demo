@@ -19,7 +19,7 @@ pipeline {
         )
         string(
             name: 'GIT_REPO_URL',
-            defaultValue: 'https://github.com/CG-FS-ABL/dcx-fs-ahead-accelerator-infra',
+            defaultValue: 'https://github.com/gaurav-tikhile-CG/terraform-demo.git',
             description: 'URL of the Git repository containing the Terraform code'
         )
         string(
