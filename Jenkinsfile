@@ -93,8 +93,6 @@ pipeline {
                             withAWS(credentials: 'aws-creds', role: env.AWS_IAM_ROLE, roleAccount: env.AWS_ACCOUNT_ID, region: env.REGION) {
                             sh 'terraform init -reconfigure'
                             }
-
-                            }
                             echo "Terraform init successful"
                         } catch (err) {
                             error "Terraform init failed: ${err.getMessage()}"
