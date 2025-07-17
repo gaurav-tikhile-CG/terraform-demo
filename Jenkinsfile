@@ -34,7 +34,7 @@ pipeline {
         )
         string(
             name: 'AWS_IAM_ROLE',
-            defaultValue: 'arn:aws:account::028343876427:account',
+            defaultValue: 'arn:aws:iam::028343876427:role/JenkinsWorkloadAccountAccessRole',
             description: 'IAM role to assume in the AWS account for deployment'
         )
     }
