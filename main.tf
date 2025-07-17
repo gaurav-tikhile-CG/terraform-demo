@@ -1,9 +1,8 @@
 provider "aws" {
-  region = var.aws_region
+  region = var.region
 }
 
-data "aws_iam_users" "all" {}
-
-output "iam_user_names" {
-  value = data.aws_iam_users.all.names
+resource "aws_s3_bucket" "example" {
+  bucket = "my-example-bucket-${var.region}"
+  acl    = "private"
 }
