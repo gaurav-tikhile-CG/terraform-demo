@@ -90,9 +90,10 @@ pipeline {
                 dir('terraform') {
                     script {
                         try {
-                            withAWS(roleAccount: env.AWS_ACCOUNT_ID, role: env.AWS_IAM_ROLE, region: env.REGION) {
-                                echo "Running terraform init"
-                                sh "terraform init -reconfigure"
+                            withAWS(credentials: 'aws-creds', role: env.AWS_IAM_ROLE, roleAccount: env.AWS_ACCOUNT_ID, region: env.REGION) {
+                            sh 'terraform init -reconfigure'
+                            }
+
                             }
                             echo "Terraform init successful"
                         } catch (err) {
