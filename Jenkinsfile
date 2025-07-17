@@ -90,9 +90,10 @@ pipeline {
                 dir('terraform') {
                     script {
                         try {
-                            withAWS(credentials: 'aws-creds', role: env.AWS_IAM_ROLE, roleAccount: env.AWS_ACCOUNT_ID, region: env.REGION) {
+                            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']]) {
                             sh 'terraform init -reconfigure'
                             }
+
                             echo "Terraform init successful"
                         } catch (err) {
                             error "Terraform init failed: ${err.getMessage()}"
@@ -104,7 +105,8 @@ pipeline {
 
         stage('Validate & Plan') {
             steps {
-                withAWS(roleAccount: env.AWS_ACCOUNT_ID, role: env.AWS_IAM_ROLE, region: env.REGION) {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']]) {
+                    sh 'terraform init -reconfigure'
                     dir('terraform') {
                         script {
                             try {
@@ -142,9 +144,10 @@ pipeline {
                             echo "Checking if tfplan exists before apply..."
                             sh "test -f tfplan || { echo 'tfplan file missing. Aborting.'; exit 1; }"
 
-                            withAWS(roleAccount: env.AWS_ACCOUNT_ID, role: env.AWS_IAM_ROLE, region: env.REGION) {
-                                echo "Running terraform apply..."
-                                sh "terraform apply -input=false tfplan"
+                            
+                            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']]) {
+                             sh 'terraform init -reconfigure'
+
                             }
                             echo "Terraform apply successful"
                         } catch (err) {
