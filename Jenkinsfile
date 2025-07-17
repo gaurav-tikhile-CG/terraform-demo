@@ -91,7 +91,7 @@ pipeline {
                     script {
                         try {
                             withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']]) {
-                            sh 'terraform init -reconfigure'
+                            bat 'terraform init -reconfigure'
                             }
 
                             echo "Terraform init successful"
@@ -106,26 +106,26 @@ pipeline {
         stage('Validate & Plan') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']]) {
-                    sh 'terraform init -reconfigure'
+                    bat 'terraform init -reconfigure'
                     dir('terraform') {
                         script {
                             try {
                                 echo "Running terraform validate..."
-                                sh "terraform validate"
+                                bat "terraform validate"
                                 echo "Validation passed"
 
                                 if (env.TF_ACTION == 'apply') {
                                     echo "Planning to apply resources..."
-                                    sh "terraform plan -var='region=${env.REGION}' -out=tfplan"
+                                    bat "terraform plan -var='region=${env.REGION}' -out=tfplan"
                                 } else if (env.TF_ACTION == 'destroy') {
                                     echo "Planning to destroy resources..."
-                                    sh "terraform plan -destroy -var='region=${env.REGION}' -out=tfplan"
+                                    bat "terraform plan -destroy -var='region=${env.REGION}' -out=tfplan"
                                 } else {
                                     error "Invalid TF_ACTION: ${env.TF_ACTION}"
                                 }
 
-                                sh "ls -lh tfplan*"
-                                sh "terraform show -no-color tfplan > tfplan.txt"
+                                bat "ls -lh tfplan*"
+                                bat "terraform batow -no-color tfplan > tfplan.txt"
                                 echo "Terraform plan completed for ${env.DEPLOY_ENV}"
                             } catch (err) {
                                 error "Terraform plan failed: ${err.getMessage()}"
@@ -142,11 +142,11 @@ pipeline {
                     script {
                         try {
                             echo "Checking if tfplan exists before apply..."
-                            sh "test -f tfplan || { echo 'tfplan file missing. Aborting.'; exit 1; }"
+                            bat "test -f tfplan || { echo 'tfplan file missing. Aborting.'; exit 1; }"
 
                             
                             withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']]) {
-                             sh 'terraform init -reconfigure'
+                             bat 'terraform init -reconfigure'
 
                             }
                             echo "Terraform apply successful"
@@ -161,7 +161,7 @@ pipeline {
 
     post {
         always {
-            echo "Pipeline finished"
+            echo "Pipeline finibated"
         }
     }
 }
